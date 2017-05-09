@@ -1,0 +1,46 @@
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h2 class="display-3">Welcome To Your Task Manager <%= session[:name]%></h2>
+    <h3 class="lead">Tasks to be completed.</h3>
+  </div>
+</div>
+<div class="table" class="row">
+  <table style="width:80%">
+    <% if @tasks.length == 0%>
+    <p>You currently have no "To Do" Tasks</p>
+    <%else%>
+    <%  @tasks.each do |t|%>
+    <tr>
+      <th>Task</th>
+      <th>Due Date</th>
+      <th>Status</th>
+      <th>Action</th>
+    </tr>
+    <tr>
+      <td><%= t.task %></td>
+      <td><%= t.due_date %></td>
+      <td><%= t.status %></td>
+      <td>
+        <% if t.status == 'ToDo' %>
+        <form action='status/<%= t.id%>' method="post">
+          <input type="hidden" name="_method" value="patch">
+          <input type="hidden" name="authenticity_token" value="<%=form_authenticity_token%>">
+          <input type='submit' id="btn" class="btn-warning" name='status' value='Done'>
+        </form>
+        <%elsif t.status == 'Done'%>
+        <form action='delete/<%= t.id%>' method="post">
+          <input type="hidden" name="_method" value="patch">
+          <input type="hidden" name="authenticity_token" value="<%=form_authenticity_token%>">
+          <input type='submit' id="btn" class="btn-danger" value='Delete'>
+        </form>
+      </td>
+    </ul>
+    <%end%>
+    <%end%>
+    <%end%>
+  </table>
+</div>
+
+
+
+<p><a id="NewTask" class="btn icon-btn btn-success" href="/tasks/new"><span class="glyphicon btn-glyphicon glyphicon-plus img-circle text-success"></span>Add New Task</a></p>
